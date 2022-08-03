@@ -22,13 +22,16 @@ function App() {
     { id: 4, title: 'ПодклассникСтиль', body: 'Это наша красота' }
   ])
 
-  const [title, setTitle] = useState('')
-  const bodyInputRef = useRef()
+  const [post, setPost] = useState({ title: '', body: '' });
+  // const [body, setBody] = useState('');
+  // const bodyInputRef = useRef()
 
   function addNewPost(e) {
     e.preventDefault();
-    console.log(title);
-    console.log(bodyInputRef.current.value)
+    setPosts([...posts, { ...post, id: Date.now() }])
+    setPost({ title: '', body: '' });
+    // setBody('');
+    // console.log(bodyInputRef.current.value)
   }
 
   // function setInput() {
@@ -41,16 +44,19 @@ function App() {
       <form>
         {/* Управляемый компонент */}
         <MyInput
-          value={title}
-          onChange={e => setTitle(e.target.value)}
+          value={post.title}
+          onChange={e => setPost({ ...post, title: e.target.value })}
           type="text"
           placeholder="Название поста"
         />
-        {/* <MyInput
-          ref={bodyInputRef}
+        {/* Неуправляемый\ Неконтролируемый компонент */}
+        <MyInput
+          // ref={bodyInputRef}
+          value={post.body}
+          onChange={e => setPost({ ...post, body: e.target.value })}
           type="text"
           placeholder="Описание поста"
-        /> */}
+        />
         <MyButton onClick={addNewPost}>Создать пост</MyButton>
       </form>
       <PostList posts={posts} title='Языки программирования (МИР)' />
