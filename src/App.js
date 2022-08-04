@@ -7,8 +7,10 @@ import MyButton from './UI/button/MyButton';
 import MyInput from './UI/input/MyInput';
 import './styles/App.css';
 import PostForm from './components/PostForm';
+import MySelect from './UI/select/MySelect';
 
 function App() {
+
   const [posts, setPosts] = useState([
     { id: 1, title: 'JavaScript', body: 'JavaScript - язык программирования' },
     { id: 2, title: 'Ruby', body: 'Ruby - для прожженных' },
@@ -16,13 +18,13 @@ function App() {
     { id: 4, title: 'HTML', body: 'Это наша жизнь' }
   ])
 
-  const [posts2, setPosts2] = useState([
-    { id: 1, title: 'Энергетик+', body: 'Наш ответ западу на его Джаву!' },
-    { id: 2, title: 'ТехноПрограЯз', body: 'ТехноПрограЯз - для опытных разработчиков' },
-    { id: 3, title: 'Верстак++', body: 'Верстак - 90 устройств' },
-    { id: 4, title: 'ПодклассникСтиль', body: 'Это наша красота' }
-  ])
-
+  // const [posts2, setPosts2] = useState([
+  //   { id: 1, title: 'Энергетик+', body: 'Наш ответ западу на его Джаву!' },
+  //   { id: 2, title: 'ТехноПрограЯз', body: 'ТехноПрограЯз - для опытных разработчиков' },
+  //   { id: 3, title: 'Верстак++', body: 'Верстак - 90 устройств' },
+  //   { id: 4, title: 'ПодклассникСтиль', body: 'Это наша красота' }
+  // ])
+  const [selectedSort, setSelectedSort] = useState('')
   // Получаем пост из дочернего элемента
   const removePost = (post) => {
     setPosts(posts.filter(p => p.id !== post.id))
@@ -41,9 +43,28 @@ function App() {
     setPosts([...posts, newPost])
   }
 
+
+
+  const sortPosts = (sort) => {
+    setSelectedSort(sort);
+    setPosts([...posts].sort((a, b) => a[sort].localCompare(b[sort])));
+  }
+
   return (
     <div className="App">
       <PostForm create={createPost} />
+      <hr style={{ margin: '15px 0' }} />
+      <div>
+        <MySelect
+          value={selectedSort}
+          onChange={sortPosts}
+          defaultValue="Сортировка"
+          options={[
+            { value: 'title', name: 'По названию' },
+            { value: 'body', name: 'По описанию' }
+          ]}
+        />
+      </div>
 
       {/* Тернарный оператор! */}
       {posts.length !== 0
