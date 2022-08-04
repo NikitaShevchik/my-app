@@ -6,6 +6,7 @@ import PostList from './components/PostList';
 import MyButton from './UI/button/MyButton';
 import MyInput from './UI/input/MyInput';
 import './styles/App.css';
+import PostForm from './components/PostForm';
 
 function App() {
   const [posts, setPosts] = useState([
@@ -22,46 +23,36 @@ function App() {
     { id: 4, title: 'ПодклассникСтиль', body: 'Это наша красота' }
   ])
 
-  const [post, setPost] = useState({ title: '', body: '' });
+  // Получаем пост из дочернего элемента
+  const removePost = (post) => {
+    setPosts(posts.filter(p => p.id !== post.id))
+  }
+  // const [post, setPost] = useState({ title: '', body: '' });
+
   // const [body, setBody] = useState('');
   // const bodyInputRef = useRef()
-
-  function addNewPost(e) {
-    e.preventDefault();
-    setPosts([...posts, { ...post, id: Date.now() }])
-    setPost({ title: '', body: '' });
-    // setBody('');
-    // console.log(bodyInputRef.current.value)
-  }
 
   // function setInput() {
   //   let input = document.querySelector('.AppInput');
   //   setValue(input.value)
   // }
 
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost])
+  }
+
   return (
     <div className="App">
-      <form>
-        {/* Управляемый компонент */}
-        <MyInput
-          value={post.title}
-          onChange={e => setPost({ ...post, title: e.target.value })}
-          type="text"
-          placeholder="Название поста"
-        />
-        {/* Неуправляемый\ Неконтролируемый компонент */}
-        <MyInput
-          // ref={bodyInputRef}
-          value={post.body}
-          onChange={e => setPost({ ...post, body: e.target.value })}
-          type="text"
-          placeholder="Описание поста"
-        />
-        <MyButton onClick={addNewPost}>Создать пост</MyButton>
-      </form>
-      <PostList posts={posts} title='Языки программирования (МИР)' />
-      <PostList posts={posts2} title='Языки программирования (СНГ)' />
-    </div>
+      <PostForm create={createPost} />
+
+      {/* Тернарный оператор! */}
+      {posts.length !== 0
+        ? <PostList remove={removePost} posts={posts} title='Языки программирования (МИР)' />
+        : <h1 style={{ textAlign: 'center', marginTop: '10px' }}>Посты не найдены :(</h1>
+      }
+
+      {/* <PostList remove={removePost2} posts={posts2} title='Языки программирования (СНГ)' /> */}
+    </div >
   );
 }
 
